@@ -93,7 +93,7 @@ class Brachistochrone:
         max_diff = ((self.N_pts-2)*self.height)**2
         diff = np.array(self.state) - np.array(other_state.state)
         abs_diff = sum(diff**2)
-        thresh = 1*10.0**(-4)
+        thresh = 1*10.0**(-5)
         if abs_diff/max_diff < thresh:
             return(True)
         else:
@@ -135,7 +135,8 @@ class Brachistochrone:
 
 
         ax.text(.8*self.width,.8*self.height,'actual: {:.3f}'.format(self.fitnessFunction()))
-        ax.plot(self.xpos,self.state,'o-',color='darkred')
+        #ax.plot(self.xpos,self.state,'o-',color='darkred')
+        ax.plot(self.xpos,self.state,'o-')
 
         if show:
             plt.show()
@@ -150,7 +151,7 @@ class Brachistochrone:
 
 
         index = randint(1,self.N_segments-1)
-        sway = self.height/2
+        sway = self.height/20.0
         new_height = self.state[index] + ((-sway) + random()*2*sway)
         #new_height = ((1.0-sway) + random()*2*sway)*self.state[index]
         if new_height < self.height:
