@@ -1,4 +1,4 @@
-from random import randint
+from random import randint,sample
 import numpy as np
 from copy import copy,deepcopy
 
@@ -6,16 +6,19 @@ from copy import copy,deepcopy
 class Skyscraper:
 
     def __init__(self,N=4,see_list = [],const_list=[]):
-        pass
+        #pass
         self.N = N
         #self.state =  np.array([N*[i+1] for i in range(N)])
 
-        self.state = np.array([[randint(1,self.N) for _ in range(self.N)] for i in range(self.N)])
+        #self.state = np.array([[randint(1,self.N) for _ in range(self.N)] for i in range(self.N)])
+        self.state = np.array(np.array([sample(list(range(1,self.N+1)),self.N) for _ in range(self.N)]))
 
+        #The see list is the list of lists of what you can see from the sides.
         #The way I'm gonna organize this is as a list of lists, where it goes
         #left, right, top, down
         self.see_list = np.array(see_list)
 
+        #The const list is because some puzzles give you constants that have to be in the solution.
         self.const_list = const_list
         for const in self.const_list:
             ind = const[0]
@@ -28,6 +31,8 @@ class Skyscraper:
         #print(self.const_list_indices)
 
         self.max_FF = 16*(self.N-1) + 8*(self.N)
+
+        #self.printState()
 
 
 
@@ -160,10 +165,26 @@ class Skyscraper:
         return((self.state==other.state).all())
 
     def mutate(self):
+
         row = randint(0,self.N-1)
         col = randint(0,self.N-1)
         if [row,col] not in self.const_list_indices:
             self.state[row,col] = randint(1,self.N)
+
+        #switch instead. This should be better if you constrained it at the beginning so it has the right number of
+        #total numbers. This is similar to the TSP thing with switching subroutes. However, it probably
+        #won't work for GA, because that won't conserve the numbers.
+        '''row1 = randint(0,self.N-1)
+        col1 = randint(0,self.N-1)
+        row2 = randint(0,self.N-1)
+        col2 = randint(0,self.N-1)
+
+
+        if ([row1,col1]!=[row1,col2]) and ([row1,col1] not in self.const_list_indices) and ([row2,col2] not in self.const_list_indices):
+            temp = self.state[row1,col1]
+            self.state[row1,col1] = self.state[row2,col2]
+            self.state[row2,col2] = temp'''
+
 
 
     def mate(self,other):
